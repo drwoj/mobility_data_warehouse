@@ -1,6 +1,6 @@
 # Mobility Data Warehouse
 
-Data warehouse that integrates mobility data from various sources along with coresponding context data such as: weather condition, economics etc.
+A data warehouse that integrates mobility data from various sources with corresponding context data such as weather conditions, economics, etc.
 
 ## Tech Stack
 - Postgresql
@@ -9,8 +9,11 @@ Data warehouse that integrates mobility data from various sources along with cor
 - Bonobo
 
 ## Data Model
-Data warehouse is designed according to Kimball's star schema main table _trajectory_ as fact which is connected to dimension tables.
-It was considered to use fact constellation schema, but conducted tests has shown that the star schema performs much better.
+The data warehouse is designed according to Kimball's star schema with main table _trajectory_ as fact connected to dimension tables.
+![Trajectory Data Warehouse](https://github.com/drwoj/mobility_data_warehouse/assets/84898707/c8fadb86-85b9-4946-8484-0134cde826f5)
+
+Fact constellation schema would allow more in-depth analysis, but conducted tests have shown that the star schema performs much better and provides sufficient analytic possibilities.
+
 ![performance comparison](https://github.com/drwoj/mobility_data_warehouse/assets/84898707/e761ece3-df6c-4c9b-bf14-5e8d07e6b9f2)
 
 
