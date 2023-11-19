@@ -1,5 +1,6 @@
 from data_ingestion.extract.extract import extract_geolife
 from data_ingestion.transform import transform as t
+from prefect import flow
 
 trajectory_id = 1204  # num of trajectories in hannover
 data_folder = r"C:\Users\drwoj\Desktop\inzynierka\datasets\trajectories_china\Geolife Trajectories 1.3\Data"
@@ -17,6 +18,8 @@ for user_folder in os.listdir(data_folder):
                 # Add your ETL code here
 """
 
+
+@flow(name="ingest_geolife_dataset")
 def ingest_geolife(db):
     path = r"C:\Users\drwoj\Desktop\20081218004559.plt"
     df = extract_geolife(path)
@@ -26,4 +29,3 @@ def ingest_geolife(db):
     gdf = t.get_gdf_with_point_column(df)
 
     db.insert_gdf(gdf)
-

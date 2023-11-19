@@ -1,10 +1,11 @@
 import pandas as pd
 import utm
-
+from prefect import flow
 from data_ingestion.extract.extract import extract_hannover
 from data_ingestion.transform import transform as t
 
 
+@flow(name="ingest_hannover_dataset")
 def ingest_hannover(db):
     path = r'C:\Users\drwoj\Desktop\inzynierka\datasets\trajectories_hannover.csv'
 
