@@ -1,7 +1,7 @@
 import os
 import geopandas as gpd
 from geoalchemy2 import Geography
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, text
 import configparser
 
 
@@ -39,7 +39,13 @@ class DatabaseConnector:
         print("Begin Load")
         gdf.to_postgis('point', self.engine, if_exists='append', index=False,
                        schema='public', dtype={'coordinates': Geography('POINT', srid='4326')})
-        print("Loading Finished!")
+        print("Loading Finished")
+
+    def truncate_and_restart_identity(self, table_name):
+        with self.engine.begin() as connection:
+            statement = text(f'TRUNCATE TABLE {table_name} RESTART IDENTITY;')
+            connection.execute(statement)
+            print(f"Table {table_name} cleaned")
 
     def disconnect(self):
         if self.engine:

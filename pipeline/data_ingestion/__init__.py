@@ -7,6 +7,7 @@ from prefect import flow
 @flow(name="run_ingestion")
 def run_ingestion():
     with DatabaseConnector() as db:
+        db.truncate_and_restart_identity('point')
         ingest_hannover(db)
         ingest_geolife(db)
 
