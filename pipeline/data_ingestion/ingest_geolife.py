@@ -1,5 +1,5 @@
-from extract.extract import extract_geolife
-import transform.transform as t
+from data_ingestion.extract.extract import extract_geolife
+from data_ingestion.transform import transform as t
 
 trajectory_id = 1204  # num of trajectories in hannover
 data_folder = r"C:\Users\drwoj\Desktop\inzynierka\datasets\trajectories_china\Geolife Trajectories 1.3\Data"

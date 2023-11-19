@@ -1,8 +1,8 @@
 import pandas as pd
 import utm
 
-from extract.extract import extract_hannover
-import transform.transform as t
+from data_ingestion.extract.extract import extract_hannover
+from data_ingestion.transform import transform as t
 
 
 def ingest_hannover(db):
