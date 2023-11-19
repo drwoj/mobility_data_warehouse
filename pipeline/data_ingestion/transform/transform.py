@@ -1,7 +1,6 @@
 import pandas as pd
 import geopandas as gpd
 from datetime import datetime, timedelta
-from prefect import task
 
 
 def get_gdf_with_point_column(df: pd.DataFrame):
@@ -30,11 +29,3 @@ def get_df_with_country_column(df: pd.DataFrame, country):
 def get_df_with_trajectory_id_column(df: pd.DataFrame, trajectory_id):
     df.insert(0, 'trajectory_id', trajectory_id)
     return df
-
-
-def transform_with_type():
-    pass
-
-
-def transform():
-    pass
