@@ -1,4 +1,4 @@
-from data_ingestion.ingest_geolife import ingest_geolife
+from data_ingestion.ingest_geolife import iterate_geolife_dataset
 from data_ingestion.ingest_hannover import ingest_hannover
 from data_ingestion.database.DatabaseConnector import DatabaseConnector
 from prefect import flow
@@ -9,7 +9,7 @@ def run_ingestion():
     with DatabaseConnector() as db:
         db.truncate_and_restart_identity('point')
         ingest_hannover(db)
-        ingest_geolife(db)
+        iterate_geolife_dataset(db)
 
 
 if __name__ == "__main__":
