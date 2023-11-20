@@ -14,6 +14,7 @@ def ingest_hannover(db):
     df = t.get_df_with_country_column(df, 'Germany')
     df['timestamp'] = pd.to_datetime(df['unixtime'], unit='s')
     df = t.filter_rows_with_time_diff_0(df)
+    df.drop(columns=['time_diff'], inplace=True)
     gdf = t.get_gdf_with_point_column(df) \
         .drop(columns={'gid', 'east_utm', 'north_utm', 'unixtime'}, axis=1)
 
