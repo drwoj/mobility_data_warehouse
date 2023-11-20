@@ -28,7 +28,7 @@ def iterate_geolife_dataset(db):
 def ingest_geolife(db, path):
     global trajectory_id
     path = path
-    pause_threshold = timedelta(minutes=1)  # Adjust the threshold as needed
+    pause_threshold = timedelta(minutes=10)  # Adjust the threshold as needed
 
     df = extract_geolife(path)
     df = t.get_df_with_trajectory_id_column(df, trajectory_id)
