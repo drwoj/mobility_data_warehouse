@@ -34,7 +34,8 @@ def ingest_geolife(db, path):
     df = t.get_df_with_trajectory_id_column(df, trajectory_id)
     df = t.get_df_with_country_column(df, 'China')
     df['timestamp'] = df['timestamp'].apply(t.tdatetime_to_datetime)
-    df['time_diff'] = df['timestamp'].diff()
+
+    df = t.filter_rows_with_time_diff_0(df)
 
     for i in range(1, len(df)):
         if df['time_diff'][i] > pause_threshold:

@@ -22,7 +22,12 @@ def tdatetime_to_datetime(tdatetime):
 
 def get_df_with_country_column(df: pd.DataFrame, country):
     df.insert(2, 'country', country)
+    return df
 
+
+def filter_rows_with_time_diff_0(df: pd.DataFrame):
+    df['time_diff'] = df['timestamp'].diff().fillna(df['timestamp'])
+    df = df[df['time_diff'] != timedelta(seconds=0)]
     return df
 
 
