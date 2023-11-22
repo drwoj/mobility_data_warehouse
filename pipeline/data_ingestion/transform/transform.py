@@ -4,6 +4,12 @@ from datetime import datetime, timedelta
 
 
 def get_gdf_with_point_column(df: pd.DataFrame):
+
+    invalid_rows = find_rows_with_invalid_coordinates(df)
+
+    if not invalid_rows.empty:
+        df = df[~df.index.isin(invalid_rows.index)]
+
     gdf = gpd.GeoDataFrame(df,
                            geometry=gpd.points_from_xy(df['longitude'], df['latitude']),
                            crs='EPSG:4326') \
@@ -11,6 +17,14 @@ def get_gdf_with_point_column(df: pd.DataFrame):
         .set_geometry('coordinates', crs='EPSG:4326') \
         .drop(columns={'latitude', 'longitude'}, axis=1)
     return gdf
+
+
+def find_rows_with_invalid_coordinates(df: pd.DataFrame):
+    invalid_rows = (
+        (df['longitude'] < -180) | (df['longitude'] > 180) |
+        (df['latitude'] < -90) | (df['latitude'] > 90)
+    )
+    return df[invalid_rows]
 
 
 def tdatetime_to_datetime(tdatetime):
