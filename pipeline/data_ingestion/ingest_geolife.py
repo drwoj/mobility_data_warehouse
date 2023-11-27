@@ -31,6 +31,8 @@ def ingest_geolife(db, path):
     pause_threshold = timedelta(minutes=10)  # Adjust the threshold as needed
 
     df = extract_geolife(path)
+    if not t.is_in_beijing(df):
+        return
     df = t.get_df_with_trajectory_id_column(df, trajectory_id)
     df = t.get_df_with_country_column(df, 'China')
     df['timestamp'] = df['timestamp'].apply(t.tdatetime_to_datetime)
