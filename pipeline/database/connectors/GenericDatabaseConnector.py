@@ -1,4 +1,6 @@
 import os
+
+import pandas as pd
 from sqlalchemy import create_engine, text
 import configparser
 
@@ -33,6 +35,13 @@ class GenericDatabaseConnector:
         with self.engine.begin() as connection:
             statement = text(query)
             connection.execute(statement)
+
+    def execute_select_query(self, query):
+        with self.engine.begin() as connection:
+            statement = text(query)
+            rows = connection.execute(statement)
+            df = pd.DataFrame.from_records(rows, columns=rows.keys())
+            return df
 
     def truncate_and_restart_identity(self, table_name):
         with self.engine.begin() as connection:
