@@ -1,21 +1,14 @@
 from etl.database.DatabaseConnector import DatabaseConnector
+from etl.sql_queries import insert_date
 
-
-def truncate_all_tables(db: DatabaseConnector):
-    print('Begin truncating')
-    db.truncate_and_restart_identity('trajectory')
-    db.truncate_and_restart_identity('weather')
-    db.truncate_and_restart_identity('economy_indicator')
-    db.truncate_and_restart_identity('district')
-    db.truncate_and_restart_identity('city')
-    db.truncate_and_restart_identity('fuel')
-    db.truncate_and_restart_identity('date')
-    print('truncating finished')
+tables_to_truncate = ['trajectory', 'weather', 'economy_indicator', 'district', 'city', 'fuel', 'date']
 
 
 def run_etl():
     with DatabaseConnector() as db:
-        truncate_all_tables(db)
+        for table in tables_to_truncate:
+            db.truncate_and_restart_identity(table)
+        db.execute_insert_query(insert_date)
 
 
 if __name__ == "__main__":
