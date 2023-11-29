@@ -27,12 +27,17 @@ class DatabaseConnector:
         }
         return db_params
 
+    def execute_insert_query(self, query):
+        with self.engine.begin() as connection:
+            statement = text(query)
+            connection.execute(statement)
+            print('query executed')
+
     def connect(self):
         db_params = self.read_config()
         self.engine = create_engine(
             f"postgresql+psycopg2://{db_params['user']}:{db_params['password']}@"
             f"{db_params['host']}:{db_params['port']}/{db_params['database']}")
-
 
     def truncate_and_restart_identity(self, table_name):
         with self.engine.begin() as connection:
