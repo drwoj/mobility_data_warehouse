@@ -1,4 +1,5 @@
-insert_date = """INSERT INTO date (timestamp, year, month, day, hour, day_name, month_name)
+insert_date = """
+INSERT INTO date (timestamp, year, month, day, hour, day_name, month_name)
 SELECT 
     timestamp,
     EXTRACT(YEAR FROM timestamp) as year,
@@ -27,4 +28,17 @@ FROM generate_series(
     '2019-03-27 23:59:59'::TIMESTAMP, 
     interval '1 hour'
 ) as timestamp;
+"""
+
+create_trajectories_from_points = """
+SELECT
+	id,
+	startTimestamp(route) AS date,
+	country,
+	route,
+	length(route)/1000 AS distance,
+	duration(route) AS duration,
+	twAvg(speed(route)) * 3.6 AS avg_speed
+	
+FROM trajectory
 """
