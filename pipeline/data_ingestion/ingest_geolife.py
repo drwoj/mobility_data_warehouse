@@ -4,13 +4,15 @@ from data_ingestion.extract.extract import extract_geolife
 from data_ingestion.transform import transform as t
 from prefect import task, flow
 
+from paths import path_trajectories_geolife
+
 trajectory_id = 1204  # num of trajectories in hannover
 
 
 @flow(name="iterate_geolife_dataset")
 def iterate_geolife_dataset(db):
     global trajectory_id
-    data_folder = r"C:\Users\drwoj\Desktop\inzynierka\datasets\trajectories_china\Geolife Trajectories 1.3\Data"
+    data_folder = path_trajectories_geolife
 
     for user_folder in os.listdir(data_folder):
         user_path = os.path.join(data_folder, user_folder)

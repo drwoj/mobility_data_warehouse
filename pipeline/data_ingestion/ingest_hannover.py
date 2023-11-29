@@ -3,13 +3,13 @@ import utm
 from prefect import task
 from data_ingestion.extract.extract import extract_hannover
 from data_ingestion.transform import transform as t
+from paths import path_trajectories_hannover
 
 
 @task(name="ingest_hannover_dataset")
 def ingest_hannover(db):
-    path = r'C:\Users\drwoj\Desktop\inzynierka\datasets\trajectories_hannover.csv'
 
-    df = extract_hannover(path)
+    df = extract_hannover(path_trajectories_hannover)
     df['latitude'], df['longitude'] = utm.to_latlon(df['east_utm'], df['north_utm'], 32, 'N')
     df = t.get_df_with_country_column(df, 'Germany')
     df['timestamp'] = pd.to_datetime(df['unixtime'], unit='s')

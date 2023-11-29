@@ -3,13 +3,6 @@ import pandas as pd
 from database.connectors.StagingAreaConnector import StagingAreaConnector
 from database.sql_queries import create_trajectories_from_points
 
-path_weather_hannover = r'C:\Users\drwoj\Desktop\inzynierka\datasets\weather_hannover.csv'
-path_weather_beijing = r'C:\Users\drwoj\Desktop\inzynierka\datasets\weather_beijing.csv'
-path_regions = r'C:\Users\drwoj\Desktop\inzynierka\datasets\regions.xlsx'
-path_fuel_hannover = r'C:\Users\drwoj\Desktop\inzynierka\datasets\fuel_prices_hannover.xlsx'
-path_fuel_beijing = r'C:\Users\drwoj\Desktop\inzynierka\datasets\fuel_prices_china.xlsx'
-path_economy = r'C:\Users\drwoj\Desktop\inzynierka\datasets\economy_indicators.xlsx'
-
 
 def extract_weather(path_csv):
     df = pd.read_csv(path_csv,
@@ -72,27 +65,3 @@ def extract_trajectories():
     with StagingAreaConnector() as connector:
         df = connector.execute_select_query(create_trajectories_from_points)
         return df
-
-
-df_weather_hannover = extract_weather(path_weather_hannover)
-df_weather_beijing = extract_weather(path_weather_beijing)
-df_districts_hannover = pd.read_excel(path_regions, sheet_name='hannover')
-df_districts_beijing = pd.read_excel(path_regions, sheet_name='beijing')
-df_fuel_prices_hannover = extract_fuel_hannover(path_fuel_hannover)
-df_fuel_prices_beijing = pd.read_excel(path_fuel_beijing,
-                                       header=1,
-                                       names=['date', 'gasoline', 'diesel'])
-df_economy_indicators = extract_economy_indicators(path_economy)
-
-df_weather_hannover['city'] = 'Hannover'
-df_weather_beijing['city'] = 'Beijing'
-df_districts_hannover['city'] = 'Hannover'
-df_districts_beijing['city'] = 'Beijing'
-df_fuel_prices_hannover['city'] = 'Hannover'
-df_fuel_prices_beijing['city'] = 'Beijing'
-
-df_weather = pd.concat([df_weather_beijing, df_weather_hannover], ignore_index=True)
-df_districts = pd.concat([df_districts_beijing, df_districts_hannover], ignore_index=True)
-df_fuel_prices = pd.concat([df_fuel_prices_beijing, df_fuel_prices_hannover], ignore_index=True)
-df_trajectories = extract_trajectories()
-
