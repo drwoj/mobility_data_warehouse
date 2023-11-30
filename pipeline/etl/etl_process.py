@@ -16,30 +16,32 @@ df_fuel_prices_beijing = pd.read_excel(p.path_fuel_beijing,
                                        names=['date', 'gasoline', 'diesel'])
 df_economy_indicators = e.extract_economy_indicators(p.path_economy)
 
-df_weather_hannover = t.filter_weather_station(df_weather_hannover, 'GME00102244')
+t.filter_weather_station(df_weather_hannover, 'GME00102244')
 df_weather_hannover['city'] = 'Hannover'
 df_weather_beijing['city'] = 'Beijing'
 df_districts_hannover['city'] = 'Hannover'
 df_districts_beijing['city'] = 'Beijing'
 df_fuel_prices_hannover['city'] = 'Hannover'
 df_fuel_prices_beijing['city'] = 'Beijing'
-df_economy_indicators = t.country_to_city(df_economy_indicators)
+
+t.country_to_city(df_economy_indicators)
+t.extend_year_to_full_date(df_economy_indicators)
 
 df_weather = pd.concat([df_weather_beijing, df_weather_hannover], ignore_index=True)
 df_districts = pd.concat([df_districts_beijing, df_districts_hannover], ignore_index=True)
 df_fuel_prices = pd.concat([df_fuel_prices_beijing, df_fuel_prices_hannover], ignore_index=True)
 
 df_trajectories = e.extract_trajectories()
-df_trajectories = t.add_foreign_key_columns(df_trajectories)
-df_trajectories = t.country_to_city(df_trajectories)
+t.add_foreign_key_columns(df_trajectories)
+t.country_to_city(df_trajectories)
 
 df_list = [df_districts, df_weather, df_economy_indicators, df_fuel_prices]
 for df in df_list:
     df['id'] = df.index
 
-df_trajectories = t.calculate_foreign_key(df_trajectories, df_weather, 'weather', 'day')
-df_trajectories = t.calculate_foreign_key(df_trajectories, df_fuel_prices, 'fuel', 'month')
-df_trajectories = t.calculate_foreign_key(df_trajectories, df_economy_indicators, 'economy_indicator', 'year')
+t.calculate_foreign_key(df_trajectories, df_weather, 'weather', 'day')
+t.calculate_foreign_key(df_trajectories, df_fuel_prices, 'fuel', 'month')
+t.calculate_foreign_key(df_trajectories, df_economy_indicators, 'economy_indicator', 'year')
 
 print(df_trajectories.info())
-#print(df_trajectories.head(5))
+print((df_trajectories.sample()))
