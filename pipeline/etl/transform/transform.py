@@ -36,13 +36,5 @@ def country_to_city(df):
     df.rename(columns={'country': 'city'}, inplace=True)
 
 
-def add_foreign_key_columns(df):
-    df.insert(1, 'date_id', None)
-    df.insert(2, 'district_id', None)
-    df.insert(3, 'weather_id', None)
-    df.insert(4, 'economy_indicator_id', None)
-    df.insert(5, 'fuel_id', None)
-
-
 def filter_weather_station(df, station):
     df = df[df['station'] == station]

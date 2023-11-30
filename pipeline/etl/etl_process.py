@@ -32,7 +32,6 @@ df_districts = pd.concat([df_districts_beijing, df_districts_hannover], ignore_i
 df_fuel_prices = pd.concat([df_fuel_prices_beijing, df_fuel_prices_hannover], ignore_index=True)
 
 df_trajectories = e.extract_trajectories()
-t.add_foreign_key_columns(df_trajectories)
 t.country_to_city(df_trajectories)
 
 df_list = [df_districts, df_weather, df_economy_indicators, df_fuel_prices]
@@ -40,7 +39,7 @@ for df in df_list:
     df['id'] = df.index
 
 t.calculate_foreign_key(df_trajectories, df_weather, 'weather', 'day')
-t.calculate_foreign_key(df_trajectories, df_fuel_prices, 'fuel', 'month')
+t.calculate_foreign_key(df_trajectories, df_fuel_prices, 'fuel_prices', 'month')
 t.calculate_foreign_key(df_trajectories, df_economy_indicators, 'economy_indicator', 'year')
 
 print(df_trajectories.info())
