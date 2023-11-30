@@ -7,8 +7,8 @@ from database.sql_queries import create_trajectories_from_points
 def extract_weather(path_csv):
     df = pd.read_csv(path_csv,
                      header=1,
-                     usecols=[1, 2, 3, 4, 5],
-                     names=['date', 'rain', 'temp_avg', 'temp_max', 'temp_min'])
+                     usecols=[0, 1, 2, 3, 4, 5],
+                     names=['station', 'date', 'rain', 'temp_avg', 'temp_max', 'temp_min'])
     return df
 
 
@@ -56,7 +56,7 @@ def extract_economy_indicators(path_excel):
     df['year'] = df['year'].astype(int)
 
     df.columns.name = None
-    df = df.rename_axis(columns={'Country Name': 'country'})
+    df = df.rename(columns={'Country Name': 'country', 'year': 'date'})
 
     return df
 

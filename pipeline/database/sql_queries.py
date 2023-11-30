@@ -33,12 +33,11 @@ FROM generate_series(
 create_trajectories_from_points = """
 SELECT
 	id,
-	startTimestamp(route) AS date,
+	startTimestamp(route)::timestamp AS date,
 	country,
 	route,
 	length(route)/1000 AS distance,
 	duration(route) AS duration,
 	twAvg(speed(route)) * 3.6 AS avg_speed
-	
 FROM trajectory
 """
