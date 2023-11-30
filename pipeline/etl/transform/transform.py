@@ -21,7 +21,8 @@ def format_date_column(df, date_granularity='day'):
     granularity_formats = {
         'day': '%Y-%m-%d',
         'month': '%Y-%m',
-        'year': '%Y'
+        'year': '%Y',
+        'hour': '%Y-%m-%d %H'
     }
     format_string = granularity_formats.get(date_granularity, '%Y-%m-%d')
     df['temp_date'] = pd.to_datetime(df['date']).dt.strftime(format_string)
@@ -59,3 +60,18 @@ def find_matching_regions(df_trajectories, df_regions):
                 df_trajectories.at[trajectory['id'], 'district_id'] = region['id']
                 df_trajectories.at[trajectory['id'], 'district_name'] = region['name']
                 break
+
+
+def calculate_date_id(df_trajectories, df_dates):
+    format_date_column(df_trajectories, 'hour')
+    format_date_column(df_dates, 'hour')
+
+    df_merged = pd.merge(df_trajectories, df_dates,
+                         how='left',
+                         on='temp_date',
+                         suffixes=('_trajectory', '_date'))
+
+    df_trajectories.drop(columns=['temp_date'], inplace=True)
+    df_dates.drop(columns=['temp_date'], inplace=True)
+
+    df_trajectories['date_id'] = df_merged['id_date']

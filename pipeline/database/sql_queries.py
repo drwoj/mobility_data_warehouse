@@ -42,3 +42,5 @@ SELECT
 	ST_AsText(ST_Centroid(trajectory(route))) AS center_point
 FROM trajectory
 """
+
+select_dates = 'SELECT id, timestamp::timestamp as date FROM date;'
