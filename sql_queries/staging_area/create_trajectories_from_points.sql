@@ -1,10 +1,11 @@
 select 
 	id,
-	startTimestamp(route) AS date,
+	startTimestamp(route)::timestamp AS date,
 	country,
-	route,
+	AsText(route),
 	length(route)/1000 AS distance,
 	duration(route) AS duration,
-	twAvg(speed(route)) * 3.6 AS avg_speed
+	twAvg(speed(route)) * 3.6 AS avg_speed,
+	ST_AsText(ST_Centroid(trajectory(route))) AS center_point
 	
 FROM trajectory

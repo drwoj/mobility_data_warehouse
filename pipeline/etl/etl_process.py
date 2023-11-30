@@ -1,4 +1,5 @@
 import pandas as pd
+from shapely import wkt
 
 import etl.extract.extract as e
 import etl.transform.transform as t
@@ -42,5 +43,9 @@ t.calculate_foreign_key(df_trajectories, df_weather, 'weather', 'day')
 t.calculate_foreign_key(df_trajectories, df_fuel_prices, 'fuel_prices', 'month')
 t.calculate_foreign_key(df_trajectories, df_economy_indicators, 'economy_indicator', 'year')
 
+df_trajectories['center_point'] = df_trajectories['center_point'].apply(wkt.loads)
+df_districts['region_polygon'] = df_districts['area'].apply(wkt.loads)
+t.find_matching_regions(df_trajectories, df_districts)
+
 print(df_trajectories.info())
-print((df_trajectories.sample()))
+print(df_trajectories.sample())

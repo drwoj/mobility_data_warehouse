@@ -1,4 +1,5 @@
 import pandas as pd
+from shapely import wkt
 
 
 def calculate_foreign_key(df_fact, df_dim, foreign_key, date_granularity='day'):
@@ -37,4 +38,24 @@ def country_to_city(df):
 
 
 def filter_weather_station(df, station):
-    df = df[df['station'] == station]
+    df = [df['station'] == station]
+
+
+def is_point_in_region(point, district):
+    return point.within(district)
+
+
+def find_matching_regions(df_trajectories, df_regions):
+    for _, trajectory in df_trajectories.iterrows():
+        center_point = trajectory['center_point']
+        trajectory_city = trajectory['city']
+
+        matching_regions = df_regions[df_regions['city'] == trajectory_city]
+
+        for _, region in matching_regions.iterrows():
+            region_polygon = region['region_polygon']
+
+            if is_point_in_region(center_point, region_polygon):
+                df_trajectories.at[trajectory['id'], 'district_id'] = region['id']
+                df_trajectories.at[trajectory['id'], 'district_name'] = region['name']
+                break
