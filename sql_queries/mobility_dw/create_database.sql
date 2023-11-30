@@ -15,7 +15,6 @@ CREATE TABLE IF NOT EXISTS date (
 CREATE TABLE IF NOT EXISTS weather (
     id SERIAL PRIMARY KEY,
     rain FLOAT,
-    snow FLOAT,
 	temperature_avg FLOAT,
 	temperature_max FLOAT,
 	temperature_min FLOAT
@@ -36,21 +35,15 @@ CREATE TABLE IF NOT EXISTS economy_indicator (
 	investment_in_transport FLOAT
 );
 
-
-CREATE TABLE IF NOT EXISTS fuel (
+CREATE TABLE IF NOT EXISTS fuel_price (
     id SERIAL PRIMARY KEY,
-    price FLOAT,
-    type VARCHAR(255)
-);
-
-CREATE TABLE IF NOT EXISTS city (
-    id SERIAL PRIMARY KEY,
-    name VARCHAR(255)
+    gasoline FLOAT,
+    diesel FLOAT
 );
 
 CREATE TABLE IF NOT EXISTS district (
     id SERIAL PRIMARY KEY,
-	city_id INTEGER REFERENCES city(id),
+	city VARCHAR(255),
     name VARCHAR(255),
 	area GEOGRAPHY
 );
@@ -61,7 +54,7 @@ CREATE TABLE IF NOT EXISTS trajectory (
     weather_id INTEGER REFERENCES weather(id),
 	district_id INTEGER REFERENCES district(id),
     economy_indicator_id INTEGER REFERENCES economy_indicator(id),
-    fuel_id INTEGER REFERENCES fuel(id),
+    fuel_price_id INTEGER REFERENCES fuel_price(id),
     route TGEOGPOINT,
 	distance FLOAT,
 	duration INTERVAL,
