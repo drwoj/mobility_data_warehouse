@@ -32,7 +32,6 @@ CREATE TABLE IF NOT EXISTS economy_indicator (
 	gdp_per_capita_constant FLOAT,
 	gdp_per_capita_current FLOAT,
 	inflation_consumer_prices FLOAT,
-	investment_in_transport FLOAT
 );
 
 CREATE TABLE IF NOT EXISTS fuel_price (

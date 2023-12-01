@@ -31,7 +31,7 @@ class GenericDatabaseConnector:
         }
         return db_params
 
-    def execute_insert_query(self, query):
+    def execute_query(self, query):
         with self.engine.begin() as connection:
             statement = text(query)
             connection.execute(statement)
@@ -42,6 +42,12 @@ class GenericDatabaseConnector:
             rows = connection.execute(statement)
             df = pd.DataFrame.from_records(rows, columns=rows.keys())
             return df
+
+    def insert_df(self, df, name):
+        with self.engine.begin() as connection:
+            print("Begin insert")
+            df.to_sql(name, con=connection, index=False, if_exists='append')
+            print("Insert Finished")
 
     def truncate_and_restart_identity(self, table_name):
         with self.engine.begin() as connection:

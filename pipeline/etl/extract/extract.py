@@ -9,7 +9,7 @@ def extract_weather(path_csv):
     df = pd.read_csv(path_csv,
                      header=1,
                      usecols=[0, 1, 2, 3, 4, 5],
-                     names=['station', 'date', 'rain', 'temp_avg', 'temp_max', 'temp_min'])
+                     names=['station', 'date', 'rain', 'temperature_avg', 'temperature_max', 'temperature_min'])
     return df
 
 
@@ -56,8 +56,18 @@ def extract_economy_indicators(path_excel):
     df['year'] = df['year'].str[:4]
     df['year'] = df['year'].astype(int)
 
-    df.columns.name = None
-    df = df.rename(columns={'Country Name': 'country', 'year': 'date'})
+    df = df.rename(columns={'Country Name': 'country',
+                            'year': 'date',
+                            'CO2 emissions from transport (% of total fuel combustion)': 'co2_emissions_transport',
+                            'GDP per capita (constant LCU)': 'gdp_per_capita_constant',
+                            'GDP per capita (current LCU)': 'gdp_per_capita_current',
+                            'Inflation, consumer prices (annual %)': 'inflation_consumer_prices',
+                            'Mortality caused by road traffic injury (per 100,000 population)': 'mortality_road_traffic',
+                            'Population density (people per sq. km of land area)': 'population_density',
+                            'Population in largest city': 'population_largest_city',
+                            'Population, total': 'population_total',
+                            'Urban population': 'population_urban',
+                            'Urban population growth (annual %)': 'population_urban_growth'})
 
     return df
 
@@ -67,8 +77,8 @@ def extract_trajectories():
         df = connector.execute_select_query(create_trajectories_from_points)
         return df
 
+
 def extract_dates():
     with MobilityDWConnector() as connector:
         df = connector.execute_select_query(select_dates)
         return df
-
