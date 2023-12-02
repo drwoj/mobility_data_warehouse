@@ -4,6 +4,7 @@ from shapely import wkt
 import etl.extract.extract as e
 import etl.transform.transform as t
 import paths as p
+import geopandas as gpd
 from database.connectors.MobilityDWConnector import MobilityDWConnector
 
 df_weather_hannover = e.extract_weather(p.path_weather_hannover)
@@ -37,7 +38,7 @@ t.country_to_city(df_trajectories)
 
 df_list = [df_districts, df_weather, df_economy_indicators, df_fuel_prices]
 for df in df_list:
-    df['id'] = df.index+1
+    df['id'] = df.index + 1
 
 t.calculate_foreign_key(df_trajectories, df_weather, 'weather', 'day')
 t.calculate_foreign_key(df_trajectories, df_fuel_prices, 'fuel_prices', 'month')
@@ -52,9 +53,17 @@ df_weather.drop(columns=['date', 'station', 'id', 'city'], inplace=True)
 df_fuel_prices.drop(columns=['date', 'city', 'id'], inplace=True)
 df_economy_indicators.drop(columns=['date', 'city', 'id', 'Population, female', 'Population, male'], inplace=True)
 
+gdf = gpd.GeoDataFrame(df_districts,
+                       geometry=df_districts['region_polygon'],
+                       crs='EPSG:4326') \
+    .drop(columns={'area', 'id', 'region_polygon'}, axis=1) \
+    .rename(columns={'geometry': 'area'}) \
+    .set_geometry('area', crs='EPSG:4326')
+
+print(gdf.sample())
+
 with MobilityDWConnector() as connector:
     connector.insert_df(df_weather, 'weather')
     connector.insert_df(df_fuel_prices, 'fuel_price')
     connector.insert_df(df_economy_indicators, 'economy_indicator')
-    #connector.insert_df(df_districts, 'districts')
-    #connector.insert_df(df_trajectories, 'trajectory')
+    connector.insert_gdf(gdf)
