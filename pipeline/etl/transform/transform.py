@@ -58,7 +58,6 @@ def find_matching_regions(df_trajectories, df_regions):
 
             if is_point_in_region(center_point, region_polygon):
                 df_trajectories.at[trajectory['id'], 'district_id'] = region['id']
-                df_trajectories.at[trajectory['id'], 'district_name'] = region['name']
                 break
 
 
