@@ -1,5 +1,4 @@
 import pandas as pd
-from shapely import wkt
 
 
 def calculate_foreign_key(df_fact, df_dim, foreign_key, date_granularity='day'):
@@ -36,6 +35,14 @@ def country_to_city(df):
     df.loc[df['country'] == 'China', 'country'] = 'Beijing'
     df.loc[df['country'] == 'Germany', 'country'] = 'Hannover'
     df.rename(columns={'country': 'city'}, inplace=True)
+
+
+def convert_euros_per_hectolitre_to_euros_per_liter(df):
+    df[['diesel', 'gasoline']] = df[['diesel', 'gasoline']].apply(lambda x: x / 100)
+
+
+def convert_rmb_per_ton_to_euros_per_liter(df, conversion, weight):
+    df[['diesel', 'gasoline']] = df[['diesel', 'gasoline']].apply(lambda x: x * conversion / weight)
 
 
 def filter_weather_station(df, station):
