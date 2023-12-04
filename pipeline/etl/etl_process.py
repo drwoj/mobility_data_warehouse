@@ -73,6 +73,8 @@ def main_etl():
         connector.insert_df(df_economy_indicators, 'economy_indicator')
         connector.insert_gdf(gdf_districts)
 
+        print('Begin loading trajectories')
+
         for index, row in df_trajectories.iterrows():
             route_value = row['route']
             if pd.isna(route_value):
@@ -100,3 +102,5 @@ def main_etl():
                     {economy_indicator_id_value},
                     {fuel_price_id_value}
                 )""")
+
+            print('Loading finished')
