@@ -9,7 +9,9 @@ Main subject are trajectories from Beijing and Hannover.
 
 ## Data Model
 The data warehouse is designed according to Kimball's star schema with main table _trajectory_ as fact connected to dimension tables.
-![Trajectory Data Warehouse (1)](https://github.com/drwoj/mobility_data_warehouse/assets/84898707/76cb57e9-a2e9-4d71-a2df-322d39c61407)
+![Trajectory Data Warehouse](https://github.com/drwoj/mobility_data_warehouse/assets/84898707/4324e255-968d-49d9-81c2-ff016df5fe41)
+
+
 
 Fact constellation schema would allow more in-depth analysis, but conducted tests have shown that the star schema performs much better and provides sufficient analytic possibilities.
 ![performance comparison](https://github.com/drwoj/mobility_data_warehouse/assets/84898707/185a1914-1a5f-4c02-a626-3f690c4531a2)
