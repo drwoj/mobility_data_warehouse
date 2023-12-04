@@ -1,14 +1,15 @@
 # Mobility Data Warehouse
 
 A data warehouse that integrates mobility data from various sources with corresponding context data such as weather conditions, economics, etc.
-Main subject are trajectories from Beijing and Hannover.
+The main subjects are trajectories from Beijing and Hannover.
+The visual layer allows analyzing trajectories on the interactive world map with various filters. It's also possible to analyze data with PostgreSQL queries.
 
 ## Tech Stack
 - Postgresql (with PostGIS and MobilityDB)
 - Python (mainly GeoPandas)
 
 ## Data Model
-The data warehouse is designed according to Kimball's star schema with main table _trajectory_ as fact connected to dimension tables.
+The data warehouse follows Kimball's star schema with the main table _trajectory_ as fact connected to dimension tables.
 ![Trajectory Data Warehouse](https://github.com/drwoj/mobility_data_warehouse/assets/84898707/4324e255-968d-49d9-81c2-ff016df5fe41)
 
 
