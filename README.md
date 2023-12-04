@@ -29,7 +29,7 @@ Fact constellation schema would allow more in-depth analysis, but conducted test
 
 ## Visualization
 ### Interactive map created with Kepler GL:
-https://kepler.gl/demo/map?mapUrl=https://dl.dropboxusercontent.com/scl/fi/p7dxmzvgh2vrfdr56n4g7/keplergl_ceekkb3.json?rlkey=2e43abpdj92utej8he0kcsugm&dl=0
+https://kepler.gl/demo/map?mapUrl=https://dl.dropboxusercontent.com/scl/fi/bdwwpq8nqhi3bcb5j563h/keplergl_gmn4zcf.json?rlkey=ma8j7d64m812di1hfhflyo5md&dl=0
 
 ### Usage examples:
 ![trajectory](https://github.com/drwoj/mobility_data_warehouse/assets/84898707/362f5429-7b58-4321-aaa2-ebc2de6f407c)
