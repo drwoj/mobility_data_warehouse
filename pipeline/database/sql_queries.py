@@ -41,6 +41,9 @@ SELECT
 	twAvg(speed(route)) * 3.6 AS avg_speed,
 	ST_AsText(ST_Centroid(trajectory(route))) AS center_point
 FROM trajectory
+WHERE length(route) > 0 
+AND duration(route) > '1 minute' 
+AND twAvg(speed(route)) * 3.6 < 300
 """
 
 select_dates = 'SELECT id, timestamp::timestamp as date FROM date;'
