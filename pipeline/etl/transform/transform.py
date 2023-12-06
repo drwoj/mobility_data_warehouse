@@ -49,25 +49,6 @@ def filter_weather_station(df, station):
     df = [df['station'] == station]
 
 
-def is_point_in_region(point, district):
-    return point.within(district)
-
-
-def find_matching_regions(df_trajectories, df_regions):
-    for _, trajectory in df_trajectories.iterrows():
-        center_point = trajectory['center_point']
-        trajectory_city = trajectory['city']
-
-        matching_regions = df_regions[df_regions['city'] == trajectory_city]
-
-        for _, region in matching_regions.iterrows():
-            region_polygon = region['region_polygon']
-
-            if is_point_in_region(center_point, region_polygon):
-                df_trajectories.at[trajectory['id'], 'district_id'] = region['id']
-                break
-
-
 def calculate_date_id(df_trajectories, df_dates):
     format_date_column(df_trajectories, 'hour')
     format_date_column(df_dates, 'hour')

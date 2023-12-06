@@ -49,4 +49,4 @@ def ingest_geolife(db, path):
     df.drop(columns=['time_diff'], inplace=True)
     gdf = t.get_gdf_with_point_column(df)
 
-    db.insert_gdf(gdf)
+    db.insert_gdf(gdf, 'point', 'coordinates', 'POINT')

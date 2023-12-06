@@ -1,6 +1,7 @@
 import os
 
 import pandas as pd
+from geoalchemy2 import Geography
 from sqlalchemy import create_engine, text
 import configparser
 
@@ -54,6 +55,16 @@ class GenericDatabaseConnector:
             statement = text(f'TRUNCATE TABLE {table_name} RESTART IDENTITY CASCADE;')
             connection.execute(statement)
             print(f"Table {table_name} cleaned")
+
+    def insert_gdf(self, gdf, table, column, geo_type):
+        print("Begin Load")
+        gdf.to_postgis(table,
+                       self.engine,
+                       if_exists='append',
+                       index=False,
+                       schema='public',
+                       dtype={column: Geography(geo_type, srid='4326')})
+        print("Loading Finished")
 
     def connect(self):
         db_params = self.read_config()

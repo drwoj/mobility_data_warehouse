@@ -33,17 +33,26 @@ FROM generate_series(
 create_trajectories_from_points = """
 SELECT 
 	id,
+	district_id,
 	startTimestamp(route)::timestamp AS date,
 	country,
 	AsText(route) as route,
 	length(route)/1000 AS distance,
 	duration(route) AS duration,
 	twAvg(speed(route)) * 3.6 AS avg_speed,
-	ST_AsText(ST_Centroid(trajectory(route))) AS center_point
+	ST_AsText(trajectory(route)) AS route_line
 FROM trajectory
 WHERE length(route) > 0 
 AND duration(route) > '1 minute' 
 AND twAvg(speed(route)) * 3.6 < 300
+"""
+
+select_districts = """
+SELECT 
+id, 
+city, 
+name, ST_AsText(area) AS area 
+FROM district
 """
 
 select_dates = 'SELECT id, timestamp::timestamp as date FROM date;'

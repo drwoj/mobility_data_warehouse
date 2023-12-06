@@ -18,4 +18,4 @@ def ingest_hannover(db):
     gdf = t.get_gdf_with_point_column(df) \
         .drop(columns={'gid', 'east_utm', 'north_utm', 'unixtime'}, axis=1)
 
-    db.insert_gdf(gdf)
+    db.insert_gdf(gdf, 'point', 'coordinates', 'POINT')
