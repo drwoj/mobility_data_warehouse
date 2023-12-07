@@ -2,7 +2,7 @@ import pandas as pd
 
 from database.connectors.MobilityDWConnector import MobilityDWConnector
 from database.connectors.StagingAreaConnector import StagingAreaConnector
-from database.sql_queries import create_trajectories_from_points, select_dates, select_districts
+from database.sql_queries import select_trajectories, select_dates, select_districts
 
 
 def extract_weather(path_csv):
@@ -73,7 +73,7 @@ def extract_economy_indicators(path_excel):
 
 def extract_trajectories():
     with StagingAreaConnector() as connector:
-        df = connector.execute_select_query(create_trajectories_from_points)
+        df = connector.execute_select_query(select_trajectories)
         return df
 
 

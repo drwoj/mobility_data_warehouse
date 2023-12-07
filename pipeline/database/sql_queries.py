@@ -30,7 +30,7 @@ FROM generate_series(
 ) as timestamp;
 """
 
-create_trajectories_from_points = """
+select_trajectories = """
 SELECT 
 	id,
 	district_id,
@@ -123,4 +123,70 @@ CREATE TABLE IF NOT EXISTS trajectory (
 
 drop_mobility_db = """DROP TABLE IF EXISTS 
 date, district, economy_indicator, fuel_price, trajectory, weather CASCADE
+"""
+
+drop_staging_area = """
+DROP TABLE IF EXISTS
+point, trajectory, district
+"""
+
+create_staging_area = """
+CREATE EXTENSION IF NOT EXISTS postgis;
+CREATE EXTENSION IF NOT EXISTS mobilitydb;
+
+CREATE TABLE IF NOT EXISTS point (
+    id SERIAL PRIMARY KEY,
+    trajectory_id BIGINT,
+    country VARCHAR(255),
+    timestamp TIMESTAMP,
+    coordinates GEOMETRY(POINT, 4326)
+);
+
+CREATE TABLE IF NOT EXISTS district (
+    id SERIAL PRIMARY KEY,
+	city VARCHAR(255),
+    name VARCHAR(255),
+	area GEOMETRY (MULTIPOLYGON, 4326)
+);
+
+CREATE TABLE IF NOT EXISTS trajectory (
+	id SERIAL PRIMARY KEY,
+	district_id  INTEGER,
+	country VARCHAR(255),
+	timestamp timestamp,
+	route tgeogpoint
+);
+"""
+
+create_trajectory_from_points = """
+INSERT INTO trajectory (country, timestamp, route)
+SELECT
+    p.country,
+    MIN(p.timestamp AT TIME ZONE 'UTC'),  -- Convert to UTC for consistent ordering
+    tgeogpoint_seq(array_agg(tgeogpoint_inst(p.coordinates, p.timestamp AT TIME ZONE 'UTC') ORDER BY p.timestamp)) AS route
+FROM
+    point p
+GROUP BY
+    p.trajectory_id, p.country;
+    """
+
+create_staging_area_indices = """
+CREATE INDEX district_area_gist ON district USING GIST (area);
+CREATE INDEX trajectory_route_gist ON trajectory USING GIST (route);
+"""
+
+spatial_join_trajectory_with_district = """
+UPDATE trajectory AS t
+SET district_id = COALESCE(ranked_districts.id, unknown_district.id)
+FROM (
+    SELECT
+        t.id AS trajectory_id,
+        d.id,
+        ROW_NUMBER() OVER (PARTITION BY t.id ORDER BY COUNT(*) DESC) AS rnk
+    FROM trajectory AS t
+    LEFT JOIN district AS d ON ST_Intersects(trajectory(t.route)::geometry, d.area)
+    GROUP BY t.id, d.id
+) AS ranked_districts
+LEFT JOIN district AS unknown_district ON unknown_district.name = 'unknown'
+WHERE t.id = ranked_districts.trajectory_id AND ranked_districts.rnk = 1;
 """

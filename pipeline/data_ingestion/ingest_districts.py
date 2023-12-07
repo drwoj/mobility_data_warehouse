@@ -6,7 +6,7 @@ import geopandas as gpd
 from database.connectors.StagingAreaConnector import StagingAreaConnector
 
 
-def ingest_districts():
+def ingest_districts(db):
     df_districts_hannover = pd.read_excel(p.path_regions, sheet_name='hannover')
     df_districts_beijing = pd.read_excel(p.path_regions, sheet_name='beijing')
 
@@ -26,5 +26,4 @@ def ingest_districts():
                                                                           'city': None,
                                                                           'area': None}])])
 
-    with StagingAreaConnector() as connector:
-        connector.insert_gdf(gdf_districts, 'district', 'area', 'MULTIPOLYGON')
+    db.insert_gdf(gdf_districts, 'district', 'area', 'MULTIPOLYGON')
