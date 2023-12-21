@@ -1,7 +1,5 @@
 from database.connectors.MobilityDWConnector import MobilityDWConnector
 from database.sql_queries import insert_date, drop_mobility_db, create_mobility_dw
-import etl.extract.extract as e
-import etl.transform.transform as t
 from etl.etl_process import main_etl
 
 
